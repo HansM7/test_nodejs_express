@@ -29,6 +29,6 @@ export async function meController(req: Request, res: Response) {
   if (response.success) {
     res.status(200).json(response.data);
   } else {
-    res.status(400).json({ message: "Register failed" });
+    res.status(400).json({ message: "Error in autentication" });
   }
 }

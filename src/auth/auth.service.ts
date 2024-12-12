@@ -87,7 +87,7 @@ export async function meService(token: string) {
       },
     });
 
-    if (!user) return { success: false, data: "Error in login" };
+    if (!user) return { success: false, data: "Error in autentication" };
 
     const { password, ...userData } = user;
 
