@@ -14,10 +14,22 @@ datasource db {
 }
 
 model user {
+  id          Int           @id @default(autoincrement())
+  name        String
+  email       String        @unique
+  password    String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  publication publication[]
+}
+
+model publication {
   id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  password  String
+  user_id   Int
+  title     String
+  content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  user user @relation(fields: [user_id], references: [id])
 }
