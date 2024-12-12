@@ -1,3 +1,4 @@
+import { successResponse } from "../common";
 import { envConfig } from "../config/env.config";
 import { compare, encrypt } from "../encrypt/bcrypt.service";
 import prisma from "../prisma/prisma.config";
@@ -18,9 +19,8 @@ export async function registerService(data: any) {
       expiresIn: "30d",
     });
 
-    return {
-      success: true,
-      data: {
+    return successResponse(
+      {
         user: {
           id,
           name,
@@ -28,7 +28,8 @@ export async function registerService(data: any) {
         },
         token,
       },
-    };
+      "Registered successfully"
+    );
   } catch (error) {
     return {
       success: false,
@@ -67,6 +68,33 @@ export async function loginService(data: any) {
           email,
         },
         token,
+      },
+    };
+  } catch (error) {
+    return {
+      success: false,
+      data: error,
+    };
+  }
+}
+
+export async function meService(token: string) {
+  try {
+    const { id, name, email } = jwt.verify(token, envConfig.JWT_SECRET) as any;
+    const user = await prisma.user.findFirst({
+      where: {
+        id,
+      },
+    });
+
+    if (!user) return { success: false, data: "Error in login" };
+
+    const { password, ...userData } = user;
+
+    return {
+      success: true,
+      data: {
+        user: userData,
       },
     };
   } catch (error) {
